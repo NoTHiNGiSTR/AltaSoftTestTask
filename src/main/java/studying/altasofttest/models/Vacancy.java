@@ -18,20 +18,14 @@ public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String name;
-
     @Column(length = 2000)
     private String description;
-
     @Column(nullable = false)
     private String position;
-
     private BigDecimal salary;
-
     private String experience;
-    //private Experience experience; TODO попробовать переписать на ENUM
     private String city;
     @CreationTimestamp
     private Timestamp createdAt;
