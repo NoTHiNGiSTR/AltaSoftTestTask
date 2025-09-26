@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: AltaSoftTest
+  profiles:
+    active: production
+  datasource:
+    url: jdbc:h2:file:./data/production_db
+    driver-class-name: org.h2.Driver
+    username: user
+    password: user
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Europe/Moscow
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: testworkmailforservices@gmail.com
+    password: hppn zfnn asxl qyjt
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+
+springdoc:
+  swagger-ui:
+    url: /openapi.yaml
+    path: /swagger-ui.html
+
+camel:
+  springboot:
+    name: AltaSoftTestCamelApp
+
+logging:
+  level:
+    org:
+      apache:
+        camel: DEBUG
+      springframework:
+        mail: DEBUG

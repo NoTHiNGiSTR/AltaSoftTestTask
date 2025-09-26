@@ -1,0 +1,404 @@
+openapi: 3.0.0
+info:
+  title: Тестовое задание для компании Alta-soft
+  description: REST API для управления подписчиками и вакансиями
+  version: 1.0.0
+
+  tags:
+    - name: Subscribers
+      description: Операции для управления подписчиками
+    - name: Vacancies
+      description: Операции для управления вакансиями
+
+paths:
+  /subscriber/{id}:
+    get:
+      tags:
+        - Subscribers
+      summary: Получение подписчика по идентификатору
+      description: Находит подписчика по id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор подписчика
+          schema:
+            type: integer
+            example: 123
+      responses:
+        '200':
+          description: Подписчик найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriberDto'
+        '404':
+          description: Подписчик не найден
+          content:
+            application/json:
+              examples:
+                notFound:
+                  value:
+                    status: 404
+                    message: "Subscriber with id={id} not found"
+                    timestamp: "2025-09-26T11:49:27.7723577"
+                    details: null
+    delete:
+      tags:
+        - Subscribers
+      summary: Удаление подписчика
+      description: Удаляет подписчика по id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор подписчика
+          schema:
+            type: integer
+            example: 123
+      responses:
+        '204':
+          description: Подписчик успешно удален
+        '404':
+          description: Подписчик не найден
+          content:
+            application/json:
+              examples:
+                notFound:
+                  value:
+                    status: 404
+                    message: "Subscriber with id={id} not found"
+                    timestamp: "2025-09-26T11:49:27.7723577"
+                    details: null
+
+  /subscriber:
+    put:
+      tags:
+        - Subscribers
+      summary: Создание подписчика
+      description: Создаёт нового подписчика
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberDto'
+      responses:
+        '201':
+          description: Подписчик успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriberDto'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              examples:
+                validationError:
+                  value:
+                    status: 400
+                    message: "Invalid data"
+                    timestamp: "2025-09-26T12:16:42.3467618"
+                    details:
+                      email: "Email must not be empty"
+                      fullName: "FullName must not be empty"
+                      desiredPosition: "Desired position must not be empty"
+
+    patch:
+      tags:
+        - Subscribers
+      summary: Редактирование подписчика
+      description: Изменяет данные существующего подписчика
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberDto'
+      responses:
+        '200':
+          description: Подписчик успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriberDto'
+        '404':
+          description: Подписчик не найден
+          content:
+            application/json:
+              examples:
+                notFound:
+                  value:
+                    status: 404
+                    message: "Subscriber with id={id} not found"
+                    timestamp: "2025-09-26T11:49:27.7723577"
+                    details: null
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              examples:
+                validationError:
+                  value:
+                    status: 400
+                    message: "Invalid data"
+                    timestamp: "2025-09-26T12:16:42.3467618"
+                    details:
+                      email: "Email must not be empty"
+                      fullName: "FullName must not be empty"
+                      desiredPosition: "Desired position must not be empty"
+
+  /vacancy:
+    get:
+      tags:
+        - Vacancies
+      summary: Получение списка вакансий
+      description: Находит вакансии подходящие под параметры
+      parameters:
+        - name: name
+          in: query
+          description: Название вакансии
+          required: false
+          schema:
+            type: string
+        - name: position
+          in: query
+          description: Позиция
+          required: false
+          schema:
+            type: string
+        - name: city
+          in: query
+          description: Город
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список вакансий
+          content:
+            application/json:
+              examples:
+                vacancyList:
+                  value:
+                    - id: 1
+                      name: "Java разработчик в отдел разработки"
+                      description: "backend"
+                      position: "Java Developer"
+                      salary: 60000.00
+                      experience: "2 года"
+                      city: "Москва"
+                      createdAt: "2025-09-26T07:25:47.041+00:00"
+                    - id: 2
+                      name: "Java разработчик в отдел разработки"
+                      description: "backend"
+                      position: "Java Developer"
+                      salary: 60000.00
+                      experience: "2 года"
+                      city: "Москва"
+                      createdAt: "2025-09-26T07:25:50.295+00:00"
+
+    put:
+      tags:
+        - Vacancies
+      summary: Создание вакансии
+      description: Создаёт новую вакансию
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VacancyDto'
+      responses:
+        '201':
+          description: Вакансия успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VacancyDto'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              examples:
+                validationError:
+                  value:
+                    status: 400
+                    message: "Invalid data"
+                    timestamp: "2025-09-26T12:30:50.5826811"
+                    details:
+                      city: "City must not be empty"
+                      name: "Vacancy name must not be empty"
+                      position: "Position must not be empty"
+                      salary: "Salary must be positive"
+
+    patch:
+      tags:
+        - Vacancies
+      summary: Редактирование вакансии
+      description: Изменяет данные существующей вакансии
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VacancyDto'
+      responses:
+        '200':
+          description: Вакансия успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VacancyDto'
+        '404':
+          description: Вакансия не найдена
+          content:
+            application/json:
+              examples:
+                notFound:
+                  value:
+                    status: 404
+                    message: "Vacancy with id={id} not found"
+                    timestamp: "2025-09-26T12:31:45.3794966"
+                    details: null
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              examples:
+                validationError:
+                  value:
+                    status: 400
+                    message: "Invalid data"
+                    timestamp: "2025-09-26T12:36:50.7365796"
+                    details:
+                      name: "Vacancy name must not be empty"
+                      position: "Position must not be empty"
+                      salary: "Salary must be positive"
+                      city: "City must not be empty"
+
+  /vacancy/{id}:
+    get:
+      tags:
+        - Vacancies
+      summary: Получение вакансии по идентификатору
+      description: Находит вакансию по id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор вакансии
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Вакансия найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VacancyDto'
+        '404':
+          description: Вакансия не найдена
+          content:
+            application/json:
+              examples:
+                notFound:
+                  value:
+                    status: 404
+                    message: "Vacancy with id={id} not found"
+                    timestamp: "2025-09-26T12:27:41.2222797"
+                    details: null
+    delete:
+      tags:
+        - Vacancies
+      summary: Удаление вакансии
+      description: Удаляет вакансию по id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор вакансии
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Вакансия успешно удалена
+        '404':
+          description: Вакансия не найдена
+          content:
+            application/json:
+              examples:
+                notFound:
+                  value:
+                    status: 404
+                    message: "Vacancy with id={id} not found"
+                    timestamp: "2025-09-26T12:38:31.0892421"
+                    details: null
+
+
+
+components:
+  schemas:
+    SubscriberDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        fullName:
+          type: string
+          example: Ivan Ivanov
+        email:
+          type: string
+          example: ivan@example.com
+        desiredPosition:
+          type: string
+          example: Backend Developer
+        city:
+          type: string
+          example: Moscow
+
+    VacancyDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Java разработчик в отдел разработки
+        description:
+          type: string
+          example: backend
+        position:
+          type: string
+          example: Java Developer
+        salary:
+          type: number
+          format: double
+          example: 60000.00
+        experience:
+          type: string
+          example: 2 года
+        city:
+          type: string
+          example: Москва
+
+    ErrorDto:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid data
+        timestamp:
+          type: string
+          format: date-time
+          example: 2025-09-26T12:16:42.3467618
+        details:
+          type: object
+          additionalProperties:
+            type: string
